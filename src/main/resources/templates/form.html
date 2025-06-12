@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agendar Nova Sessão</title>
+    <style>
+        body { font-family: sans-serif; margin: 2em; }
+        form { display: flex; flex-direction: column; max-width: 400px; }
+        label { margin-top: 1em; }
+        input, select { padding: 8px; margin-top: 0.5em; }
+        button { margin-top: 1.5em; padding: 10px; background-color: #28a745; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+<h1>Agendar Nova Sessão</h1>
+
+<form method="post" th:action="@{/sessoes}" th:object="${sessaoDTO}">
+
+    <label for="mentorado">Selecione o Mentorado:</label>
+    <select id="mentorado" th:field="*{mentoradoId}" required>
+        <option value="">-- Selecione --</option>
+        <option th:each="mentorado : ${todosMentorados}"
+                th:value="${mentorado.id}"
+                th:text="${mentorado.nome}">
+        </option>
+    </select>
+
+    <label for="dataHora">Data e Hora da Sessão:</label>
+    <input type="datetime-local" id="dataHora" th:field="*{dataHora}" required>
+
+    <button type="submit">Agendar Sessão</button>
+</form>
+
+<p style="margin-top: 2em;">
+    <a th:href="@{/dashboard}">Voltar para o Dashboard</a>
+</p>
+
+</body>
+</html>

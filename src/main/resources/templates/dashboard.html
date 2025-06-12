@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard do Mentor</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .resultado { margin-top: 20px; padding: 10px; border: 1px solid #007bff; background-color: #e7f3ff; }
+  </style>
+</head>
+<body>
+
+<h1>Dashboard do Mentor</h1>
+<p>Suas sessões pendentes:</p>
+
+<div th:if="${resultadoAprovacao}" class="resultado">
+  <h3>Resultado da Última Ação:</h3>
+  <p th:text="${resultadoAprovacao}"></p>
+</div>
+
+<table>
+  <thead>
+  <tr>
+    <th>ID Sessão</th>
+    <th>Mentorado</th>
+    <th>Horário Proposto</th>
+    <th>Status Atual</th>
+    <th>Ação</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="sessao : ${sessoes}">
+    <td th:text="${sessao.id}">1</td>
+    <td th:text="${sessao.mentorado.nome}">Nome do Mentorado</td>
+    <td th:text="${#temporals.format(sessao.dataHora, 'dd/MM/yyyy HH:mm')}">dd/mm/yyyy hh:mm</td>
+    <td th:text="${sessao.status}">Pendente</td>
+    <td>
+      <form method="post" th:action="@{/sessoes/aprovar/{id}(id=${sessao.id})}">
+        <button type="submit">Gerenciar</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+  <a href="/sessoes/nova" style="padding: 10px; background-color: #007bff; color: white; text-decoration: none;">
+    + Agendar Nova Sessão
+  </a>
+</div>
+</body>
+</html>
