@@ -34,7 +34,7 @@ class SistemaMentoriaApplicationTests {
 	@Test
 	void testRealizarLoginComSucessoERedirecionarParaDashboard() throws Exception {
 		mockMvc.perform(post("/login")
-						.param("email", "ana.p@exemplo.com")
+						.param("email", "ana.p@mentor.com")
 						.param("senha", "senha123"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(redirectedUrl("/dashboard"));
