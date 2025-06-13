@@ -2,61 +2,116 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Dashboard do Mentor</title>
+  <title>Dashboard - Sistema de Mentoria</title>
   <style>
-    body { font-family: sans-serif; margin: 2em; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background-color: #f2f2f2; }
-    .resultado { margin-top: 20px; padding: 10px; border: 1px solid #007bff; background-color: #e7f3ff; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background-color: #f4f4f8; margin: 0; }
+    .header { background-color: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.1); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; }
+    .header h1 { margin: 0; color: #007bff; font-size: 24px; }
+    .user-info { display: flex; align-items: center; }
+    .user-info span { margin-right: 16px; color: #333; }
+    .logout-button { background-color: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+    .logout-button:hover { background-color: #c82333; }
+    .main-content { padding: 32px; }
+    .nav-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 32px; }
+    .nav-card { background-color: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-decoration: none; color: #333; transition: transform 0.2s, box-shadow 0.2s; }
+    .nav-card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+    .nav-card h2 { margin-top: 0; color: #007bff; }
+    .sessions-section { background-color: #fff; padding: 24px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px;}
+    th, td { text-align: left; padding: 12px; border-bottom: 1px solid #ddd; vertical-align: middle; }
+    th { background-color: #f8f9fa; }
+    .status-badge { padding: 4px 8px; border-radius: 12px; font-size: 12px; font-weight: 600; color: #fff; }
+    .status-pendente { background-color: #ffc107; color: #000; }
+    .status-aprovada { background-color: #28a745; }
+    .status-recusada, .status-cancelada { background-color: #dc3545; }
+    .message { padding: 15px; margin-bottom: 20px; border-radius: 5px; border: 1px solid transparent; }
+    .success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+    .error { color: #721c24; background-color: #f8d7da; border-color: #f5c6cb; }
+    /* Estilos para o formulário de ação */
+    .action-form { display: flex; align-items: center; gap: 8px; }
+    .action-form select { padding: 6px; border-radius: 4px; border: 1px solid #ccc; }
+    .action-form button { padding: 6px 12px; border-radius: 4px; border: none; color: white; background-color: #007bff; cursor: pointer; }
   </style>
 </head>
 <body>
-<div style="text-align: right; margin-bottom: 20px;">
-  <form th:action="@{/logout}" method="post">
-    <button type="submit" style="padding: 8px 15px; background-color: #dc3545; color: white; border: none; cursor: pointer;">
-      Logout
-    </button>
-  </form>
-</div>
 
-<h1>Dashboard do Mentor</h1>
-<p>Suas sessões pendentes:</p>
+<header class="header">
+  <h1>Dashboard</h1>
+  <div class="user-info">
+    <span th:text="|Olá, ${nomeUsuario}|"></span>
+    <form th:action="@{/logout}" method="post">
+      <button type="submit" class="logout-button">Logout</button>
+    </form>
+  </div>
+</header>
 
-<div th:if="${resultadoAprovacao}" class="resultado">
-  <h3>Resultado da Última Ação:</h3>
-  <p th:text="${resultadoAprovacao}"></p>
-</div>
+<main class="main-content">
+  <div th:if="${success}" class="message success">
+    <p th:text="${success}"></p>
+  </div>
+  <div th:if="${error}" class="message error">
+    <p th:text="${error}"></p>
+  </div>
 
-<table>
-  <thead>
-  <tr>
-    <th>ID Sessão</th>
-    <th>Mentorado</th>
-    <th>Horário Proposto</th>
-    <th>Status Atual</th>
-    <th>Ação</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="sessao : ${sessoes}">
-    <td th:text="${sessao.id}">1</td>
-    <td th:text="${sessao.mentorado.nome}">Nome do Mentorado</td>
-    <td th:text="${#temporals.format(sessao.dataHora, 'dd/MM/yyyy HH:mm')}">dd/mm/yyyy hh:mm</td>
-    <td th:text="${sessao.status}">Pendente</td>
-    <td>
-      <form method="post" th:action="@{/sessoes/aprovar/{id}(id=${sessao.id})}">
-        <button type="submit">Gerenciar</button>
-      </form>
-    </td>
-  </tr>
-  </tbody>
-</table>
+  <div class="nav-links">
+    <a th:if="${!isMentor}" th:href="@{/create-session}" class="nav-card">
+      <h2>Solicitar Mentoria</h2>
+      <p>Encontre um mentor e agende uma nova sessão.</p>
+    </a>
+    <div th:if="${isMentor}" class="nav-card">
+      <h2>Área do Mentor</h2>
+      <p>Gerencie suas sessões e disponibilidade na lista abaixo.</p>
+    </div>
+  </div>
 
-<div style="margin-top: 20px;">
-  <a href="/sessoes/nova" style="padding: 10px; background-color: #007bff; color: white; text-decoration: none;">
-    + Agendar Nova Sessão
-  </a>
-</div>
+  <div class="sessions-section">
+    <h2>Minhas Sessões de Mentoria</h2>
+
+    <div th:if="${!sessoes.isEmpty()}">
+      <table>
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th th:text="${isMentor} ? 'Mentorado' : 'Mentor'">Mentor/Mentorado</th>
+          <th>Data e Hora</th>
+          <th>Status</th>
+          <th th:if="${isMentor}">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="sessao : ${sessoes}">
+          <td th:text="${sessao.id}">1</td>
+          <td th:text="${isMentor} ? ${sessao.mentorado.nome} : ${sessao.mentor.nome}">Nome</td>
+          <td th:text="${#temporals.format(sessao.dataHora, 'dd/MM/yyyy HH:mm')}">Data</td>
+          <td>
+                            <span class="status-badge"
+                                  th:text="${sessao.status}"
+                                  th:classappend="|status-${#strings.toLowerCase(sessao.status.split(' ')[0])}|">
+                                  Pendente
+                            </span>
+          </td>
+          <td th:if="${isMentor}">
+            <div th:if="${sessao.status == 'Pendente'}">
+              <form class="action-form" th:action="@{/update-session-status}" method="post">
+                <input type="hidden" name="sessaoId" th:value="${sessao.id}" />
+                <select name="novoStatus">
+                  <option value="Aprovada">Aprovar</option>
+                  <option value="Recusada">Recusar</option>
+                </select>
+                <button type="submit">Salvar</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div th:if="${sessoes.isEmpty()}">
+      <p>Nenhuma sessão de mentoria encontrada.</p>
+    </div>
+  </div>
+</main>
+
 </body>
 </html>

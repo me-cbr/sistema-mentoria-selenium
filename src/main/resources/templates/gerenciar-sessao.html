@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Sessão de Mentoria</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        form { display: flex; flex-direction: column; width: 300px; gap: 10px; }
+        #resultado { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+<h1>Gerenciar Aprovação de Sessão</h1>
+<form id="formGerenciar" action="/gerenciar-sessao" method="post">
+    <label for="horarioProposto">Horário Proposto (YYYY-MM-DDTHH:MM:SS):</label>
+    <input type="text" id="horarioProposto" name="horarioProposto" required>
+
+    <label for="sessaoId">ID da Sessão:</label>
+    <input type="number" id="sessaoId" name="sessaoId" required>
+
+    <button type="submit">Enviar</button>
+</form>
+
+<div id="resultado"></div>
+
+<script>
+    document.getElementById('formGerenciar').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const response = await fetch(this.action, {
+            method: 'post',
+            body: new URLSearchParams(formData)
+        });
+        const text = await response.text();
+        document.getElementById('resultado').innerText = text;
+    });
+</script>
+</body>
+</html>

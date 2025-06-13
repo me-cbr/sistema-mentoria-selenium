@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Atualizar Status da Sessão</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        form { display: flex; flex-direction: column; width: 300px; gap: 10px; }
+        #resultado { margin-top: 20px; font-weight: bold; }
+    </style>
+</head>
+<body>
+<h1>Atualizar Status da Sessão</h1>
+<form id="formAtualizar" action="/atualizar-status" method="post">
+    <label for="sessaoId">ID da Sessão:</label>
+    <input type="number" id="sessaoId" name="sessaoId" required value="1">
+
+    <label for="novoStatus">Novo Status:</label>
+    <select id="novoStatus" name="novoStatus">
+        <option value="aprovada">Aprovada</option>
+        <option value="recusada">Recusada</option>
+        <option value="iniciada">Iniciada</option>
+        <option value="finalizada">Finalizada</option>
+        <option value="cancelada">Cancelada</option>
+    </select>
+
+    <label for="motivo">Motivo (se aplicável):</label>
+    <input type="text" id="motivo" name="motivo">
+
+    <button type="submit">Atualizar Status</button>
+</form>
+
+<div id="resultado"></div>
+
+<script>
+    document.getElementById('formAtualizar').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        const response = await fetch(this.action, {
+            method: 'post',
+            body: new URLSearchParams(formData)
+        });
+        const text = await response.text();
+        document.getElementById('resultado').innerText = text;
+    });
+</script>
+</body>
+</html>

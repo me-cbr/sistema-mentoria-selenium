@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - Sistema de Mentoria</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background-color: #f4f4f8; margin: 0; padding: 20px 0; }
+        .register-container { background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 380px; text-align: center; }
+        h1 { margin-bottom: 24px; color: #333; }
+        .form-group { margin-bottom: 16px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600; }
+        button:hover { background-color: #218838; }
+        .error-message { background-color: #f8d7da; color: #721c24; padding: 10px; border-radius: 4px; margin-bottom: 20px; }
+        .login-link { margin-top: 16px; }
+    </style>
+</head>
+<body>
+<div class="register-container">
+    <h1>Crie sua Conta</h1>
+
+    <div th:if="${error}" class="error-message">
+        <p th:text="${error}"></p>
+    </div>
+
+    <form th:action="@{/register}" method="post">
+        <div class="form-group">
+            <label for="nome">Nome Completo:</label>
+            <input type="text" id="nome" name="nome" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required>
+        </div>
+        <div class="form-group">
+            <label for="userType">Eu sou:</label>
+            <select id="userType" name="userType" onchange="toggleBioField()">
+                <option value="mentorado">Mentorado (buscando mentoria)</option>
+                <option value="mentor">Mentor (oferecendo mentoria)</option>
+            </select>
+        </div>
+        <div class="form-group" id="bioField" style="display:none;">
+            <label for="biografia">Biografia (para mentores):</label>
+            <textarea id="biografia" name="biografia" rows="3"></textarea>
+        </div>
+        <button type="submit">Registrar</button>
+    </form>
+    <div class="login-link">
+        Já tem uma conta? <a th:href="@{/login}">Faça login</a>
+    </div>
+</div>
+<script>
+    function toggleBioField() {
+        var userType = document.getElementById('userType').value;
+        var bioField = document.getElementById('bioField');
+        bioField.style.display = userType === 'mentor' ? 'block' : 'none';
+    }
+</script>
+</body>
+</html>

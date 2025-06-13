@@ -2,33 +2,46 @@
 <html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Sistema de Mentoria</title>
+    <title>Login - Sistema de Mentoria</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; }
-        .login-container { padding: 2em; background: white; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        form { display: flex; flex-direction: column; width: 300px; }
-        label { margin-top: 1em; }
-        input { padding: 8px; margin-top: 0.5em; }
-        button { margin-top: 1.5em; padding: 10px; background-color: #007bff; color: white; border: none; cursor: pointer; }
-        .error { margin-top: 1em; padding: 10px; border: 1px solid #dc3545; background-color: #f8d7da; color: #721c24; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f8; margin: 0; }
+        .login-container { background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+        h1 { margin-bottom: 24px; color: #333; }
+        .form-group { margin-bottom: 16px; text-align: left; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; font-weight: 600; }
+        button:hover { background-color: #0056b3; }
+        .message { padding: 10px; border-radius: 4px; margin-bottom: 20px; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .register-link { margin-top: 16px; }
     </style>
 </head>
 <body>
 <div class="login-container">
-    <h2>Login no Sistema</h2>
+    <h1>Sistema de Mentoria</h1>
 
-    <form method="post" th:action="@{/login}">
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+    <div th:if="${error}" class="message error">
+        <p th:text="${error}"></p>
+    </div>
+    <div th:if="${success}" class="message success">
+        <p th:text="${success}"></p>
+    </div>
 
-        <label for="senha">Senha:</label>
-        <input type="password" id="senha" name="senha" required>
-
-        <button type="submit">Entrar</button>
+    <form th:action="@{/login}" method="post">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="" required autofocus>
+        </div>
+        <div class="form-group">
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" value="" required>
+        </div>
+        <button type="submit">Login</button>
     </form>
-
-    <div th:if="${erro}" class="error" th:text="${erro}">
-        Usuário ou senha inválidos.
+    <div class="register-link">
+        Não tem uma conta? <a th:href="@{/register}">Crie uma agora</a>
     </div>
 </div>
 </body>
