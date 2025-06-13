@@ -7,11 +7,9 @@ public class SessaoRequestDTO {
 
     private Long mentoradoId;
 
-    // Esta anotação ajuda o Spring a converter o texto do formulário para um objeto LocalDateTime
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime dataHora;
 
-    // Getters e Setters
     public Long getMentoradoId() {
         return mentoradoId;
     }

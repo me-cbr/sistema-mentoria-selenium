@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Sistema de Mentoria</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; }
+        .login-container { padding: 2em; background: white; border-radius: 5px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        form { display: flex; flex-direction: column; width: 300px; }
+        label { margin-top: 1em; }
+        input { padding: 8px; margin-top: 0.5em; }
+        button { margin-top: 1.5em; padding: 10px; background-color: #007bff; color: white; border: none; cursor: pointer; }
+        .error { margin-top: 1em; padding: 10px; border: 1px solid #dc3545; background-color: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h2>Login no Sistema</h2>
+
+    <form method="post" th:action="@{/login}">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="senha">Senha:</label>
+        <input type="password" id="senha" name="senha" required>
+
+        <button type="submit">Entrar</button>
+    </form>
+
+    <div th:if="${erro}" class="error" th:text="${erro}">
+        Usuário ou senha inválidos.
+    </div>
+</div>
+</body>
+</html>

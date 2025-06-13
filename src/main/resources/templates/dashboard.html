@@ -12,6 +12,13 @@
   </style>
 </head>
 <body>
+<div style="text-align: right; margin-bottom: 20px;">
+  <form th:action="@{/logout}" method="post">
+    <button type="submit" style="padding: 8px 15px; background-color: #dc3545; color: white; border: none; cursor: pointer;">
+      Logout
+    </button>
+  </form>
+</div>
 
 <h1>Dashboard do Mentor</h1>
 <p>Suas sessões pendentes:</p>

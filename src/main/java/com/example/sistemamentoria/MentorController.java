@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
 @Controller
 public class MentorController {
 
@@ -22,8 +21,23 @@ public class MentorController {
     private static Mentor mentorMock;
     private static List<Mentorado> todosMentorados = new ArrayList<>();
 
+    public static List<Mentorado> getTodosMentorados() {
+        return todosMentorados;
+    }
+
+    public static Mentor getMentorMock() {
+        return mentorMock;
+    }
+
 
     static {
+        resetMockData();
+    }
+
+    public static void resetMockData() {
+        sessoesMock.clear();
+        todosMentorados.clear();
+
         LocalDateTime dataAlice = LocalDateTime.now().plusDays(2).withHour(10).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime dataBruno = LocalDateTime.now().plusDays(3).withHour(14).withMinute(0).withSecond(0).withNano(0);
         LocalDateTime dataDiana = LocalDateTime.now().plusHours(12).withSecond(0).withNano(0);
@@ -36,7 +50,7 @@ public class MentorController {
         agenda.adicionarHorario(dataDiana);
         agenda.adicionarHorario(dataFernando);
 
-        mentorMock = new Mentor(1L, "Carlos", "carlos@mentor.com", "123", "Bio do Carlos", agenda);
+        mentorMock = new Mentor(1L, "Maria", "maria@mentor.com", "123", "Bio da Maria", agenda);
 
         Mentorado mentoradoAlice = new Mentorado(101L, "Alice Souza", "alice@email.com", "123");
         Mentorado mentoradoBruno = new Mentorado(102L, "Bruno Lima", "bruno@email.com", "123");
@@ -56,7 +70,6 @@ public class MentorController {
         todosMentorados.add(mentoradoDiana);
         todosMentorados.add(mentoradoFernando);
         todosMentorados.add(mentoradoGisele);
-
     }
 
     @GetMapping("/sessoes/nova")
